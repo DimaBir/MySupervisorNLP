@@ -2,6 +2,7 @@ import nltk
 import win32com.client as win32
 
 from sentence_utils import find_sentence
+from utils import create_csv, write_csv
 
 
 def split_text_to_sentences(text):
@@ -53,5 +54,24 @@ def get_comments_and_sentences(filepath):
                     print("Reply by: " + c.Replies(r).Author)
                     print("Reply text: " + c.Replies(r).Range.Text)  # text of the reply
     doc.Close()
-    word.Quit()
+    # word.Quit()
     return result_dict, all_sentences
+
+
+def parse_files(file_paths, filename):
+    sent_comm_dict = {}
+    all_sentences = []
+
+    create_csv(filename)
+    id = 0
+    for filepath in file_paths:
+        try:
+            sent_comm_dict, all_sentences = get_comments_and_sentences(filepath=filepath)
+            id = write_csv(sent_comm_dict=sent_comm_dict, all_sentences=all_sentences, filename=filename, id=id)
+            # print(sent_comm_dict)
+        except Exception as e:
+            print(e)
+        finally:
+            continue
+
+    return sent_comm_dict, all_sentences
