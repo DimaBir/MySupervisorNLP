@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 from nltk import word_tokenize, pos_tag
 
+from models import word2vec
 from text_utils import parse_files
 from utils import find_doc_files_path
 
@@ -18,12 +19,14 @@ if __name__ == '__main__':
 
     # Proceed file by file
     filename = r"D:\MySupervisorNLP\wordy_ds.csv"
-    parse_files(file_paths, filename, comment_to_filter="wordy", only_with_comment=True)
+    # parse_files(file_paths, filename, comment_to_filter="wordy", only_with_comment=True)
 
     # TODO: Add this as separate functions
     # Read CSV to panda
-    # df = pd.read_csv(filename, encoding='latin_1')
-    # wordy_sentences = df.loc[df['Class'] == 1]
+    df = pd.read_csv(filename, encoding='latin_1')
+    wordy_sentences = df.loc[df['Class'] == 1]
+
+    word2vec(wordy_sentences)
     # clear_sentences = df.loc[df['Class'] == 0].sample(n=len(wordy_sentences))
     #
     # tags = []
