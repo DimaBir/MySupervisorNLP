@@ -122,8 +122,10 @@ if __name__ == '__main__':
     model, device = init()
 
     result_labels = []
-    for sen in [not_wordy_1, not_wordy_2, not_wordy_3, not_wordy_4, not_wordy_5, not_wordy_6, not_wordy_7, not_wordy_8,
-                wordy_1, wordy_2, wordy_3, wordy_4, wordy_5, wordy_6, wordy_7, wordy_8, wordy_9, "Not so good wordy sentence that I wrote to him before I wanted to write to her."]:
+    for sen in [
+        "Among pathological hallmarks of AD are the senile plaques, which are formed by the copper induced aggregation of the amyloid beta peptides.",
+        not_wordy_1, not_wordy_2, not_wordy_3, not_wordy_4, not_wordy_5, not_wordy_6, not_wordy_7, not_wordy_8, wordy_1,
+        wordy_2, wordy_3, wordy_4, wordy_5, wordy_6, wordy_7, wordy_8, wordy_9]:
         result_labels.append(predict_class(model=model, device=device, sentence=sen))
 
     for label in result_labels:
