@@ -84,7 +84,7 @@ def predict_class(sentence, model, device):
     elif pred_label == 0 and res < threshold:
         result = "Clear"
     elif pred_label == 0 and res >= threshold:
-        result = "Wordy" if threshold < res and res != 0.4 else "Clear"
+        result = "Wordy" if threshold * factor - delta < res and res != 0.4 else "Clear"
         # TODO: Deal with "A few inches of snow is necessary to go sledding."
 
     return result
