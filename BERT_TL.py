@@ -11,6 +11,7 @@ import shap
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
+from colorama import Fore, Back, Style
 
 from utils import sentence_feature_extractor, get_num_of_wordiness
 
@@ -75,7 +76,7 @@ def predict_class(sentence, model, device):
     threshold = 0.2
     factor = 1.9
     delta = 0.02
-    res = get_num_of_wordiness(sen) / len(sen.split())
+    res = get_num_of_wordiness(sentence) / len(sentence.split())
 
     if pred_label == 1 and res >= threshold:
         result = "Wordy"
@@ -102,31 +103,39 @@ def init():
 
 
 if __name__ == '__main__':
-    not_wordy_1 = "Unmixing results is highly affected from imaging geometry: camera/view zenithal and azimuth angles and light source direction."
-    not_wordy_2 = "The main idea of the DIP paper is using the network itself as the regularization for the corrupted image, without the need for training on thousandths of examples."
-    not_wordy_3 = "Imaging is taking a big part of our lives, sciences use imagery for discovering from which particles are moon or Mars made of, agricultures know to irrigate or fertilize their field according to imagery of their field.."
-    not_wordy_4 = "Indeed, if parasites and pathogens follow the patterns predicted for other taxa, it is reasonable to expect that some diseases will adapt to changing environmental conditions and potentially increase in prevalence, whereas others will suffer negative consequences leading to range contractions and even local extinctions."
-    not_wordy_5 = "In my opinion torture is always wrong."
-    not_wordy_6 = "A few inches of snow is necessary to go sledding."
-    not_wordy_7 = "New students are required to attend a meeting on Friday, September 22."
-    not_wordy_8 = "I bought a dog for companionship."
-    wordy_1 = "In my research I'm following the long quest for cognitive system."
-    wordy_2 = "This technique was proved to be efficient and accurate one, however, it still needneeds a primary expert analysis and not fully automatic."
-    wordy_3 = "At first, it is rather surprising that it is an abstract thing."
-    wordy_4 = "A few inches of snow on the ground is all that is necessary in order for a person to be able to go sledding."
-    wordy_5 = "The subjects that are considered most important by students are those that have been shown to be useful to them after graduation."
-    wordy_6 = "There are many students who like reading."
-    wordy_7 = "As part of the Paris agreement which was  signed in 2015, the world’s nations have agreed to pursue efforts to limit global warming to 1.5oC above the pre-industrial levels, in light of the  risks of the climate crisis."
-    wordy_8 = "The theory of lattices is a well developed one and has been used  to define the  real world objects known as crystals."
-    wordy_9 = "I bought a dog for the purpose of providing me with companionship."
+    not_wordy_0 = ("Among pathological hallmarks of AD are the senile plaques, which are formed by the copper induced aggregation of the amyloid beta peptides.", "Clear")
+    not_wordy_1 = ("Unmixing results is highly affected from imaging geometry: camera/view zenithal and azimuth angles and light source direction.", "Clear")
+    not_wordy_2 = ("The main idea of the DIP paper is using the network itself as the regularization for the corrupted image, without the need for training on thousandths of examples.", "Clear")
+    not_wordy_3 = ("Imaging is taking a big part of our lives, sciences use imagery for discovering from which particles are moon or Mars made of, agricultures know to irrigate or fertilize their field according to imagery of their field..", "Clear")
+    not_wordy_4 = ("Indeed, if parasites and pathogens follow the patterns predicted for other taxa, it is reasonable to expect that some diseases will adapt to changing environmental conditions and potentially increase in prevalence, whereas others will suffer negative consequences leading to range contractions and even local extinctions.", "Clear")
+    not_wordy_5 = ("In my opinion torture is always wrong.", "Clear")
+    not_wordy_6 = ("A few inches of snow is necessary to go sledding.", "Clear")
+    not_wordy_7 = ("New students are required to attend a meeting on Friday, September 22.", "Clear")
+    not_wordy_8 = ("I bought a dog for companionship.", "Clear")
+    wordy_1 = ("In my research I'm following the long quest for cognitive system.", "Wordy")
+    wordy_2 = ("This technique was proved to be efficient and accurate one, however, it still needneeds a primary expert analysis and not fully automatic.", "Wordy")
+    wordy_3 = ("At first, it is rather surprising that it is an abstract thing.", "Wordy")
+    wordy_4 = ("A few inches of snow on the ground is all that is necessary in order for a person to be able to go sledding.", "Wordy")
+    wordy_5 = ("The subjects that are considered most important by students are those that have been shown to be useful to them after graduation.", "Wordy")
+    wordy_6 = ("There are many students who like reading.", "Wordy")
+    wordy_7 = ("As part of the Paris agreement which was  signed in 2015, the world’s nations have agreed to pursue efforts to limit global warming to 1.5oC above the pre-industrial levels, in light of the  risks of the climate crisis.", "Wordy")
+    wordy_8 = ("The theory of lattices is a well developed one and has been used  to define the  real world objects known as crystals.", "Wordy")
+    wordy_9 = ("I bought a dog for the purpose of providing me with companionship.", "Wordy")
+
     model, device = init()
 
     result_labels = []
-    for sen in [
-        "Among pathological hallmarks of AD are the senile plaques, which are formed by the copper induced aggregation of the amyloid beta peptides.",
-        not_wordy_1, not_wordy_2, not_wordy_3, not_wordy_4, not_wordy_5, not_wordy_6, not_wordy_7, not_wordy_8, wordy_1,
-        wordy_2, wordy_3, wordy_4, wordy_5, wordy_6, wordy_7, wordy_8, wordy_9]:
-        result_labels.append(predict_class(model=model, device=device, sentence=sen))
+    sentences = [not_wordy_0, not_wordy_1, not_wordy_2, not_wordy_3, not_wordy_4, not_wordy_5, not_wordy_6, not_wordy_7,
+                 not_wordy_8, wordy_1, wordy_2, wordy_3, wordy_4, wordy_5, wordy_6, wordy_7, wordy_8, wordy_9]
 
+    for sen in sentences:
+        result_labels.append(predict_class(model=model, device=device, sentence=sen[0]))
+
+    i = 0
+    correct = 0
     for label in result_labels:
-        print(label)
+        # print("\n" + sentences[i][0] + "\nPrediction: (" + label + ") -- " + "Correct" if sentences[i][1] == label else "Wrong")
+        correct = correct + (1 if sentences[i][1] == label else 0)
+        i = i + 1
+
+    print("Accuracy: %.2f%%" % ((correct/i) * 100))
