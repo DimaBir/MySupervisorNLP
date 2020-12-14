@@ -93,7 +93,7 @@ def predict_class(sentence, model, device):
 
 def init():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model_save_name = 'best_0.9_checkpoint.pth'  # '0.8984375_checkpoint.pth'
+    model_save_name = 'best_0.9_checkpoint.pth'
     path = F"{model_save_name}"
 
     # Load BertForSequenceClassification, the pretrained BERT model with a single linear classification layer on top.
@@ -122,11 +122,12 @@ if __name__ == '__main__':
     wordy_8 = ("The theory of lattices is a well developed one and has been used  to define the  real world objects known as crystals.", "Wordy")
     wordy_9 = ("I bought a dog for the purpose of providing me with companionship.", "Wordy")
 
+    sentences = [not_wordy_0, not_wordy_1, not_wordy_2, not_wordy_3, not_wordy_4, not_wordy_5, not_wordy_6, not_wordy_7,
+                 not_wordy_8, wordy_1, wordy_2, wordy_3, wordy_4, wordy_5, wordy_6, wordy_7, wordy_8, wordy_9]
+
     model, device = init()
 
     result_labels = []
-    sentences = [not_wordy_0, not_wordy_1, not_wordy_2, not_wordy_3, not_wordy_4, not_wordy_5, not_wordy_6, not_wordy_7,
-                 not_wordy_8, wordy_1, wordy_2, wordy_3, wordy_4, wordy_5, wordy_6, wordy_7, wordy_8, wordy_9]
 
     for sen in sentences:
         result_labels.append(predict_class(model=model, device=device, sentence=sen[0]))
@@ -134,7 +135,7 @@ if __name__ == '__main__':
     i = 0
     correct = 0
     for label in result_labels:
-        # print("\n" + sentences[i][0] + "\nPrediction: (" + label + ") -- " + "Correct" if sentences[i][1] == label else "Wrong")
+        print("\n" + sentences[i][0] + "\nPrediction: (" + label + ") -- " + "Correct" if sentences[i][1] == label else "Wrong")
         correct = correct + (1 if sentences[i][1] == label else 0)
         i = i + 1
 
